@@ -67,7 +67,7 @@
         <header-file src="src/ios/CDVSumUp.h" />
         <source-file src="src/ios/CDVSumUp.m" />
         <preference name="SUMUP_API_KEY" />
-        <framework src="SumUpSDK" type="podspec" spec="~> 3.5b1" />
+        <framework src="SumUpSDK" type="podspec" spec="~> 4.0.1" />
     </platform>
 
     <js-module src="www/sumup.js" name="SumUp">
