@@ -158,19 +158,20 @@
 //            NSLog(@"%@ : %@", key, [result.additionalInfo objectForKey:key]);
 //          }
           NSDictionary *card = result.additionalInfo[@"card"];
-          NSDictionary *dict = @{
-                                 @"transaction_code" : result.additionalInfo[@"transaction_code"],
-                                 @"card_type" : card[@"type"],
-                                 @"merchant_code" : result.additionalInfo[@"merchant_code"],
-                                 @"amount" : result.additionalInfo[@"amount"],
-                                 @"tip_amount" : result.additionalInfo[@"tip_amount"],
-                                 @"vat_amount" : result.additionalInfo[@"vat_amount"],
-                                 @"currency" : result.additionalInfo[@"currency"],
-                                 @"status" : result.additionalInfo[@"status"],
-                                 @"payment_type" : result.additionalInfo[@"payment_type"],
-                                 @"entry_mode" : result.additionalInfo[@"entry_mode"],
-                                 @"installments" : result.additionalInfo[@"installments"],
-                                 };
+          NSMutableDictionary *dict = [NSMutableDictionary new];
+  
+          NSArray *keysToCheck = @[@"transaction_code", @"merchant_code", @"amount", @"tip_amount", @"vat_amount",
+                            @"currency", @"status", @"payment_type", @"entry_mode"];
+  
+          for (NSString *key in keysToCheck) {
+              if (result.additionalInfo[key]) {
+                  dict[key] = result.additionalInfo[key];
+              }
+          }
+  
+          if (card[@"type"]) {
+              dict[@"card_type"] = card[@"type"];
+          }
           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict];
         } else {
           NSInteger errorCode = [error code];
