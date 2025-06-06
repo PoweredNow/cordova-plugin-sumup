@@ -145,8 +145,7 @@
 
     CDVPluginResult* pluginResult = nil;
     SMPCheckoutRequest *request = [SMPCheckoutRequest requestWithTotal:[NSDecimalNumber decimalNumberWithDecimal:total] title:title
-        currencyCode:currency
-        paymentOptions:SMPPaymentOptionAny];
+        currencyCode:currency];
 
     [request setSkipScreenOptions:SMPSkipScreenOptionSuccess];
 

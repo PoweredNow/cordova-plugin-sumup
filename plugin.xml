@@ -72,7 +72,7 @@
                 <source url="https://cdn.cocoapods.org/"/>
             </config>
             <pods>
-                <pod name="SumUpSDK" spec="~> 4.4.0" />
+                <pod name="SumUpSDK" spec="~> 6.0.0" />
             </pods>
         </podspec>
     </platform>

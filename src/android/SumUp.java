@@ -27,6 +27,7 @@ public class SumUp extends CordovaPlugin {
   private static final int REQUEST_CODE_LOGIN = 1;
   private static final int REQUEST_CODE_PAYMENT = 2;
   private static final int REQUEST_CODE_PAYMENT_SETTINGS = 3;
+  private static final int REQUEST_CODE_CARD_READER_PAGE = 4;
 
   private CallbackContext callback = null;
 
@@ -76,9 +77,16 @@ public class SumUp extends CordovaPlugin {
     }
 
     if (action.equals("settings")) {
+      Runnable runnable = () -> {
+        try {
+          SumUpAPI.openCardReaderPage(cordova.getActivity(), REQUEST_CODE_CARD_READER_PAGE);
+        } catch (Exception e) {
+          System.out.println(e.getMessage());
+        }
+      };
       callback = callbackContext;
       cordova.setActivityResultCallback(this);
-      cordova.getActivity().runOnUiThread(() -> SumUpAPI.openPaymentSettingsActivity(cordova.getActivity(), REQUEST_CODE_PAYMENT_SETTINGS));
+      cordova.getActivity().runOnUiThread(runnable);
 
       return true;
     }
