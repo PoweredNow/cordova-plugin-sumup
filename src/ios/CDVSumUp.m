@@ -194,4 +194,56 @@
     }
 }
 
+-(void) checkTapToPayAvailability:(CDVInvokedUrlCommand *)command {
+  [SMPSumUpSDK checkTapToPayAvailability:^(BOOL isAvailable, BOOL isActivated, NSError * _Nullable error) {
+    CDVPluginResult* pluginResult = nil;
+
+    if (error == nil) {
+      NSDictionary *dict = @{
+                             @"isAvailable" : @(isAvailable),
+                             @"isActivated" : @(isActivated)
+                             };
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:dict];
+    } else {
+      NSInteger errorCode = [error code];
+      NSDictionary *dict = @{
+                             @"code" : @(errorCode),
+                             @"message" : [error localizedDescription] ?: @"Error checking Tap to Pay availability"
+                             };
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:dict];
+    }
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }];
+}
+
+-(void) presentTapToPayActivation:(CDVInvokedUrlCommand *)command {
+  [SMPSumUpSDK presentTapToPayActivationFromViewController:self.viewController
+                                                   animated:YES
+                                            completionBlock:^(BOOL success, NSError * _Nullable error) {
+    CDVPluginResult* pluginResult = nil;
+
+    if (success) {
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    } else {
+      NSInteger errorCode = error ? [error code] : 0;
+      NSDictionary *dict = @{
+                             @"code" : @(errorCode),
+                             @"message" : [error localizedDescription] ?: @"Tap to Pay activation failed"
+                             };
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:dict];
+    }
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }];
+}
+
+-(void) testSDKIntegration:(CDVInvokedUrlCommand *)command {
+  [SMPSumUpSDK testSDKIntegration];
+
+  CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+
 @end
