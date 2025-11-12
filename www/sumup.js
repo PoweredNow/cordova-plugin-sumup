@@ -31,5 +31,14 @@ module.exports = {
     },
     isloggedin: function() {
         return new Promise((resolve, reject) => cordova.exec(resolve, reject, 'SumUp', 'isLoggedIn', []));
+    },
+    checkTapToPayAvailability: function() {
+        return new Promise((resolve, reject) => cordova.exec(resolve, reject, 'SumUp', 'checkTapToPayAvailability', []));
+    },
+    presentTapToPayActivation: function() {
+        return new Promise((resolve, reject) => cordova.exec(resolve, reject, 'SumUp', 'presentTapToPayActivation', []));
+    },
+    testSDKIntegration: function() {
+        return new Promise((resolve, reject) => cordova.exec(resolve, reject, 'SumUp', 'testSDKIntegration', []));
     }
 }
