@@ -147,7 +147,7 @@
         if (error == nil && isAvailable) {
             [self showPaymentMethodSelectionForTotal:total currency:currency title:title isActivated:isActivated command:command];
         } else {
-            [self processPaymentWithTotal:total currency:currency title:title paymentOption:SMPPaymentOptionCardReader command:command];
+            [self processPaymentWithTotal:total currency:currency title:title paymentMethod:SMPPaymentMethodCardReader command:command];
         }
     }];
 }
@@ -160,20 +160,20 @@
     UIAlertAction *cardReaderAction = [UIAlertAction actionWithTitle:@"Card Reader"
                                                                style:UIAlertActionStyleDefault
                                                              handler:^(UIAlertAction * _Nonnull action) {
-        [self processPaymentWithTotal:total currency:currency title:title paymentOption:SMPPaymentOptionCardReader command:command];
+        [self processPaymentWithTotal:total currency:currency title:title paymentMethod:SMPPaymentMethodCardReader command:command];
     }];
 
     UIAlertAction *tapToPayAction = [UIAlertAction actionWithTitle:@"Tap to Pay"
                                                              style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * _Nonnull action) {
         if (isActivated) {
-            [self processPaymentWithTotal:total currency:currency title:title paymentOption:SMPPaymentOptionTapToPay command:command];
+            [self processPaymentWithTotal:total currency:currency title:title paymentMethod:SMPPaymentMethodTapToPay command:command];
         } else {
             [SMPSumUpSDK presentTapToPayActivationFromViewController:self.viewController
                                                              animated:YES
                                                       completionBlock:^(BOOL success, NSError * _Nullable activationError) {
                 if (success) {
-                    [self processPaymentWithTotal:total currency:currency title:title paymentOption:SMPPaymentOptionTapToPay command:command];
+                    [self processPaymentWithTotal:total currency:currency title:title paymentMethod:SMPPaymentMethodTapToPay command:command];
                 } else {
                     NSDictionary *dict = @{
                                            @"code" : @0,
@@ -209,13 +209,13 @@
     [self.viewController presentViewController:alert animated:YES completion:nil];
 }
 
--(void) processPaymentWithTotal:(NSDecimal)total currency:(NSString*)currency title:(NSString*)title paymentOption:(SMPPaymentOptions)paymentOption command:(CDVInvokedUrlCommand*)command {
+-(void) processPaymentWithTotal:(NSDecimal)total currency:(NSString*)currency title:(NSString*)title paymentMethod:(SMPPaymentMethod)paymentMethod command:(CDVInvokedUrlCommand*)command {
     CDVPluginResult* pluginResult = nil;
     SMPCheckoutRequest *request = [SMPCheckoutRequest requestWithTotal:[NSDecimalNumber decimalNumberWithDecimal:total] title:title
         currencyCode:currency];
 
     [request setSkipScreenOptions:SMPSkipScreenOptionSuccess];
-    [request setPaymentOptions:paymentOption];
+    [request setPaymentMethod:paymentMethod];
 
     [SMPSumUpSDK checkoutWithRequest:request fromViewController:self.viewController completion:^(SMPCheckoutResult *result, NSError *error) {
         CDVPluginResult* pluginResult = nil;
