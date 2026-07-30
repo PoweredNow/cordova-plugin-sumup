@@ -23,7 +23,8 @@
                 <param name="android-package" value="com.nuvopoint.cordova.sumup.SumUp" />
             </feature>
         </config-file>
-        <config-file target="./res/values/strings.xml" parent="/resources">
+        <source-file src="src/android/sumup.xml" target-dir="res/values" />
+        <config-file target="res/values/sumup.xml" parent="/resources">
             <string name="SUMUP_API_KEY">$SUMUP_API_KEY</string>
         </config-file>
         <source-file src="src/android/SumUp.java" target-dir="src/com/nuvopoint/cordova/sumup" />
